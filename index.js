@@ -48,11 +48,17 @@ function checkUserExists(req, res, next) {
 }
 
 function checkUserInArray(req, res, next){
-  if(!users[req.params.index]){
+  const user = users[req.params.index]
+  if(!user){
     return res.status(400).json({error: 'Usuario does not exists'})
 
   }
+  req.user = user;
+
+
   return next()
+
+  
 }
 
 app.get( '/', () => {
@@ -79,11 +85,11 @@ app.get( '/users/:index', checkUserInArray,(req,res) => {
 
   //const nome  = req.query.nome  -> busca o campo nome na url
   // const id = req.params.id -> pega via router params o id
-  const { index } = req.params //-> desta forma desestrutura (es6) o req e pega o campo igual a constante
+  //const { index } = req.params //-> desta forma desestrutura (es6) o req e pega o campo igual a constante
 
 
  //return res.send('ola mundo') // res.send envia um texto de volta
- return res.json(users[index]) // res.send envia um json de volta
+ return res.json(req.user) // res.send envia um json de volta
 
 });
 
